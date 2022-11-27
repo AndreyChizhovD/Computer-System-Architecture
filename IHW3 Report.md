@@ -39,8 +39,8 @@ gcc -masm=intel \
     -fno-jump-tables \
     -fno-stack-protector \
     -fno-exceptions \
-    ./v39.c \
-    -S -o ./v39.s
+    ./v16.c \
+    -S -o ./v16.s
 ```
 ### Получившаяся программа на ассемблере
 ```assembly
