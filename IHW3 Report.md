@@ -209,9 +209,9 @@ gcc ./taylorSeries.o ./main.o ./a.out
 ### main.s
 ```assembly
 	.file	"main.c"
-	.intel_syntax noprefix
-	.text
-	.section	.rodata
+	.intel_syntax noprefix				# intel syntax
+	.text						# начало секции
+	.section	.rodata				# переход в секцию .rodata
 .LC1:
 	.string	"r"
 .LC2:
@@ -226,21 +226,21 @@ gcc ./taylorSeries.o ./main.o ./a.out
 	.globl	main
 	.type	main, @function
 main:
-	push	rbp
-	mov	rbp, rsp
-	sub	rsp, 64
-	mov	DWORD PTR -52[rbp], edi
-	mov	QWORD PTR -64[rbp], rsi
+	push	rbp					# rbp сохранен на стек
+	mov	rbp, rsp				# rbp := rsp		
+	sub	rsp, 64					# rsp -= 64
+	mov	DWORD PTR -52[rbp], edi			# argc
+	mov	QWORD PTR -64[rbp], rsi			# argv
 	mov	rax, QWORD PTR fs:40
-	mov	QWORD PTR -8[rbp], rax
-	xor	eax, eax
+	mov	QWORD PTR -8[rbp], rax			# -> далее все объявленные в мейне переменные input,
+	xor	eax, eax				# output, eps, x, sum
 	movsd	xmm0, QWORD PTR .LC0[rip]
 	movsd	QWORD PTR -40[rbp], xmm0
 	lea	rax, .LC1[rip]
 	mov	rsi, rax
 	lea	rax, .LC2[rip]
 	mov	rdi, rax
-	call	fopen@PLT
+	call	fopen@PLT				# вызов fopen
 	mov	QWORD PTR -32[rbp], rax
 	lea	rdx, -48[rbp]
 	mov	rax, QWORD PTR -32[rbp]
@@ -248,7 +248,7 @@ main:
 	mov	rsi, rcx
 	mov	rdi, rax
 	mov	eax, 0
-	call	__isoc99_fscanf@PLT
+	call	__isoc99_fscanf@PLT			# вызов fscanf
 	mov	rax, QWORD PTR -32[rbp]
 	mov	rdi, rax
 	call	fclose@PLT
@@ -256,14 +256,14 @@ main:
 	movsd	xmm0, QWORD PTR -40[rbp]
 	movapd	xmm1, xmm0
 	movq	xmm0, rax
-	call	taylorSeries@PLT
+	call	taylorSeries@PLT			# вызов taylorSeries(x, eps)
 	movq	rax, xmm0
 	mov	QWORD PTR -24[rbp], rax
 	lea	rax, .LC4[rip]
 	mov	rsi, rax
 	lea	rax, .LC5[rip]
 	mov	rdi, rax
-	call	fopen@PLT
+	call	fopen@PLT				# открыли файл на чтение
 	mov	QWORD PTR -16[rbp], rax
 	mov	rdx, QWORD PTR -24[rbp]
 	mov	rax, QWORD PTR -16[rbp]
@@ -272,17 +272,17 @@ main:
 	mov	rsi, rdx
 	mov	rdi, rax
 	mov	eax, 1
-	call	fprintf@PLT
+	call	fprintf@PLT				# запись в файл
 	mov	rax, QWORD PTR -16[rbp]
 	mov	rdi, rax
 	call	fclose@PLT
 	mov	eax, 0
 	mov	rdx, QWORD PTR -8[rbp]
 	sub	rdx, QWORD PTR fs:40
-	je	.L3
+	je	.L3					# секция .L3
 	call	__stack_chk_fail@PLT
 .L3:
-	leave
+	leave						# выход
 	ret
 	.size	main, .-main
 	.section	.rodata
@@ -301,9 +301,9 @@ main:
 taylorSeries:
 	push	rbp
 	mov	rbp, rsp
-	movsd	QWORD PTR -40[rbp], xmm0
+	movsd	QWORD PTR -40[rbp], xmm0			# сохраняем аргументы на стек 
 	movsd	QWORD PTR -48[rbp], xmm1
-	mov	DWORD PTR -20[rbp], 1
+	mov	DWORD PTR -20[rbp], 1				
 	movsd	xmm0, QWORD PTR .LC0[rip]
 	movsd	QWORD PTR -16[rbp], xmm0
 	movsd	xmm0, QWORD PTR .LC0[rip]
@@ -321,12 +321,12 @@ taylorSeries:
 	movsd	xmm0, QWORD PTR -16[rbp]
 	addsd	xmm0, QWORD PTR -8[rbp]
 	movsd	QWORD PTR -16[rbp], xmm0
-	add	DWORD PTR -20[rbp], 1
+	add	DWORD PTR -20[rbp], 1				# прибавляем единичку в факториал
 	movsd	xmm0, QWORD PTR -8[rbp]
 	movq	xmm1, QWORD PTR .LC2[rip]
 	andpd	xmm0, xmm1
 	comisd	xmm0, QWORD PTR -48[rbp]
-	jnb	.L2
+	jnb	.L2						# true => прыгаем в начало секции do-while
 	movsd	xmm0, QWORD PTR -16[rbp]
 	movq	rax, xmm0
 	movq	xmm0, rax
