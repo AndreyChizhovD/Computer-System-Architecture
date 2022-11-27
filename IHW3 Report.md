@@ -145,22 +145,22 @@ extern double taylorSeries(double x, double eps);
 
 int main(int argc, char** argv)
 {
-	FILE *input;
-	FILE *output;
+    FILE *input;
+    FILE *output;
     double eps;
-	double x;
+    double x;
     double sum;
 
-	eps = 0.0005;
-	input = fopen("input.txt", "r");
+    eps = 0.0005;
+    input = fopen("input.txt", "r");
     fscanf(input, "%lf", &x);
-	fclose(input);
+    fclose(input);
     
     sum = taylorSeries(x, eps);
     
-	output = fopen("output.txt", "w");
+    output = fopen("output.txt", "w");
     fprintf(output, "%lf", sum);
-	fclose(output);
+    fclose(output);
 
     return 0;
 }
@@ -172,7 +172,7 @@ int main(int argc, char** argv)
 #include <math.h>
 
 double taylorSeries(double x, double eps) {
-	int n;
+    int n;
     double sum;
     double cur;
     
