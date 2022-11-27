@@ -32,3 +32,109 @@ int main(int argc, char** argv)
     return 0;
 }
 ```
+### Компиляция программы с оптимизацией
+```sh
+gcc -masm=intel \
+    -fno-asynchronous-unwind-tables \
+    -fno-jump-tables \
+    -fno-stack-protector \
+    -fno-exceptions \
+    ./v39.c \
+    -S -o ./v39.s
+```
+### Получившаяся программа на ассемблере
+```assembly
+	.file	"v16.c"
+	.intel_syntax noprefix
+	.text
+	.section	.rodata
+.LC0:
+	.string	"%lf"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+	push	rbp
+	mov	rbp, rsp
+	sub	rsp, 64
+	mov	DWORD PTR -52[rbp], edi
+	mov	QWORD PTR -64[rbp], rsi
+	mov	rax, QWORD PTR fs:40
+	mov	QWORD PTR -8[rbp], rax
+	xor	eax, eax
+	lea	rax, -40[rbp]
+	mov	rsi, rax
+	lea	rax, .LC0[rip]
+	mov	rdi, rax
+	mov	eax, 0
+	call	__isoc99_scanf@PLT
+	movsd	xmm0, QWORD PTR .LC1[rip]
+	movsd	QWORD PTR -16[rbp], xmm0
+	movsd	xmm0, QWORD PTR .LC2[rip]
+	movsd	QWORD PTR -32[rbp], xmm0
+	movsd	xmm0, QWORD PTR .LC2[rip]
+	movsd	QWORD PTR -24[rbp], xmm0
+	mov	DWORD PTR -44[rbp], 1
+.L2:
+	movsd	xmm0, QWORD PTR -40[rbp]
+	movq	xmm1, QWORD PTR .LC3[rip]
+	xorpd	xmm0, xmm1
+	pxor	xmm1, xmm1
+	cvtsi2sd	xmm1, DWORD PTR -44[rbp]
+	divsd	xmm0, xmm1
+	movsd	xmm1, QWORD PTR -24[rbp]
+	mulsd	xmm0, xmm1
+	movsd	QWORD PTR -24[rbp], xmm0
+	movsd	xmm0, QWORD PTR -32[rbp]
+	addsd	xmm0, QWORD PTR -24[rbp]
+	movsd	QWORD PTR -32[rbp], xmm0
+	add	DWORD PTR -44[rbp], 1
+	movsd	xmm0, QWORD PTR -24[rbp]
+	movq	xmm1, QWORD PTR .LC4[rip]
+	andpd	xmm0, xmm1
+	comisd	xmm0, QWORD PTR -16[rbp]
+	jnb	.L2
+	mov	rax, QWORD PTR -32[rbp]
+	movq	xmm0, rax
+	lea	rax, .LC0[rip]
+	mov	rdi, rax
+	mov	eax, 1
+	call	printf@PLT
+	mov	eax, 0
+	mov	rdx, QWORD PTR -8[rbp]
+	sub	rdx, QWORD PTR fs:40
+	je	.L4
+	call	__stack_chk_fail@PLT
+.L4:
+	leave
+	ret
+	.size	main, .-main
+	.section	.rodata
+	.align 8
+.LC1:
+	.long	-755914244
+	.long	1061184077
+	.align 8
+.LC2:
+	.long	0
+	.long	1072693248
+	.align 16
+.LC3:
+	.long	0
+	.long	-2147483648
+	.long	0
+	.long	0
+	.align 16
+.LC4:
+	.long	-1
+	.long	2147483647
+	.long	0
+	.long	0
+	.ident	"GCC: (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0"
+	.section	.note.GNU-stack,"",@progbits
+```
+### Разделим на 2 единицы компиляции.
+### C
+```c
+
+```
