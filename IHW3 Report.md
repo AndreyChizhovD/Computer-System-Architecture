@@ -135,6 +135,62 @@ main:
 ```
 ### Разделим на 2 единицы компиляции.
 ### C
+### main.c
 ```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
+extern double taylorSeries(double x, double eps);
+
+int main(int argc, char** argv)
+{
+	FILE *input;
+	FILE *output;
+    double eps;
+	double x;
+    double sum;
+
+	eps = 0.0005;
+	input = fopen("input.txt", "r");
+    fscanf(input, "%lf", &x);
+	fclose(input);
+    
+    sum = taylorSeries(x, eps);
+    
+	output = fopen("output.txt", "w");
+    fprintf(output, "%lf", sum);
+	fclose(output);
+
+    return 0;
+}
+```
+### taylorSeries.c
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+double taylorSeries(double x, double eps) {
+	int n;
+    double sum;
+    double cur;
+    
+    n = 1;
+    sum = 1;
+    cur = 1;
+    do {
+        cur *= (-1.0) * x / n;
+        sum += cur;
+        ++n;
+    } while (fabs(cur) >= eps);
+    
+    return sum;
+}
+```
+```sh
+gcc ./main.c -c -o main.o
+gcc ./taylorSeries.c -c -o taylorSeries.o
+
+gcc ./taylorSeries.o ./main.o ./a.out
 ```
