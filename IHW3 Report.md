@@ -194,3 +194,10 @@ gcc ./taylorSeries.c -c -o taylorSeries.o
 
 gcc ./taylorSeries.o ./main.o ./a.out
 ```
+### tests
+|input.txt  | output.txt     | WolframAlpha         |
+|-----------|:--------------:|:--------------------:|
+| 1.345     | 0.260575       | 0.260540...          |
+|      5    |      0.006706  |      0.006737...   |
+| 	    | 		    | 			 |
+| 	    | 			|		|
