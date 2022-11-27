@@ -205,3 +205,149 @@ gcc ./taylorSeries.o ./main.o ./a.out
 |      5    |      0.006706  |      0.006737...   |
 |    4.327  |   0.013171    | 	0.0132071...	 |
 | 	-2.2    | 	9.024981	|	9.02501...	|
+### Ассемблер
+### main.s
+```assembly
+	.file	"main.c"
+	.intel_syntax noprefix
+	.text
+	.section	.rodata
+.LC1:
+	.string	"r"
+.LC2:
+	.string	"input.txt"
+.LC3:
+	.string	"%lf"
+.LC4:
+	.string	"w"
+.LC5:
+	.string	"output.txt"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+	push	rbp
+	mov	rbp, rsp
+	sub	rsp, 64
+	mov	DWORD PTR -52[rbp], edi
+	mov	QWORD PTR -64[rbp], rsi
+	mov	rax, QWORD PTR fs:40
+	mov	QWORD PTR -8[rbp], rax
+	xor	eax, eax
+	movsd	xmm0, QWORD PTR .LC0[rip]
+	movsd	QWORD PTR -40[rbp], xmm0
+	lea	rax, .LC1[rip]
+	mov	rsi, rax
+	lea	rax, .LC2[rip]
+	mov	rdi, rax
+	call	fopen@PLT
+	mov	QWORD PTR -32[rbp], rax
+	lea	rdx, -48[rbp]
+	mov	rax, QWORD PTR -32[rbp]
+	lea	rcx, .LC3[rip]
+	mov	rsi, rcx
+	mov	rdi, rax
+	mov	eax, 0
+	call	__isoc99_fscanf@PLT
+	mov	rax, QWORD PTR -32[rbp]
+	mov	rdi, rax
+	call	fclose@PLT
+	mov	rax, QWORD PTR -48[rbp]
+	movsd	xmm0, QWORD PTR -40[rbp]
+	movapd	xmm1, xmm0
+	movq	xmm0, rax
+	call	taylorSeries@PLT
+	movq	rax, xmm0
+	mov	QWORD PTR -24[rbp], rax
+	lea	rax, .LC4[rip]
+	mov	rsi, rax
+	lea	rax, .LC5[rip]
+	mov	rdi, rax
+	call	fopen@PLT
+	mov	QWORD PTR -16[rbp], rax
+	mov	rdx, QWORD PTR -24[rbp]
+	mov	rax, QWORD PTR -16[rbp]
+	movq	xmm0, rdx
+	lea	rdx, .LC3[rip]
+	mov	rsi, rdx
+	mov	rdi, rax
+	mov	eax, 1
+	call	fprintf@PLT
+	mov	rax, QWORD PTR -16[rbp]
+	mov	rdi, rax
+	call	fclose@PLT
+	mov	eax, 0
+	mov	rdx, QWORD PTR -8[rbp]
+	sub	rdx, QWORD PTR fs:40
+	je	.L3
+	call	__stack_chk_fail@PLT
+.L3:
+	leave
+	ret
+	.size	main, .-main
+	.section	.rodata
+	.align 8
+.LC0:
+	.long	-755914244
+	.long	1061184077
+```
+### taylorSeries.s
+```assembly
+	.file	"taylorSeries.c"
+	.intel_syntax noprefix
+	.text
+	.globl	taylorSeries
+	.type	taylorSeries, @function
+taylorSeries:
+	push	rbp
+	mov	rbp, rsp
+	movsd	QWORD PTR -40[rbp], xmm0
+	movsd	QWORD PTR -48[rbp], xmm1
+	mov	DWORD PTR -20[rbp], 1
+	movsd	xmm0, QWORD PTR .LC0[rip]
+	movsd	QWORD PTR -16[rbp], xmm0
+	movsd	xmm0, QWORD PTR .LC0[rip]
+	movsd	QWORD PTR -8[rbp], xmm0
+.L2:
+	movsd	xmm0, QWORD PTR -40[rbp]
+	movq	xmm1, QWORD PTR .LC1[rip]
+	xorpd	xmm0, xmm1
+	pxor	xmm1, xmm1
+	cvtsi2sd	xmm1, DWORD PTR -20[rbp]
+	divsd	xmm0, xmm1
+	movsd	xmm1, QWORD PTR -8[rbp]
+	mulsd	xmm0, xmm1
+	movsd	QWORD PTR -8[rbp], xmm0
+	movsd	xmm0, QWORD PTR -16[rbp]
+	addsd	xmm0, QWORD PTR -8[rbp]
+	movsd	QWORD PTR -16[rbp], xmm0
+	add	DWORD PTR -20[rbp], 1
+	movsd	xmm0, QWORD PTR -8[rbp]
+	movq	xmm1, QWORD PTR .LC2[rip]
+	andpd	xmm0, xmm1
+	comisd	xmm0, QWORD PTR -48[rbp]
+	jnb	.L2
+	movsd	xmm0, QWORD PTR -16[rbp]
+	movq	rax, xmm0
+	movq	xmm0, rax
+	pop	rbp
+	ret
+	.size	taylorSeries, .-taylorSeries
+	.section	.rodata
+	.align 8
+.LC0:
+	.long	0
+	.long	1072693248
+	.align 16
+.LC1:
+	.long	0
+	.long	-2147483648
+	.long	0
+	.long	0
+	.align 16
+.LC2:
+	.long	-1
+	.long	2147483647
+	.long	0
+	.long	0
+```
