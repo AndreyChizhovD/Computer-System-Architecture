@@ -4,7 +4,7 @@
 
 ## 4
 ### Код на языке C
-```c
+```C
 #include <stdio.h>
 
 static int A[1048576];
